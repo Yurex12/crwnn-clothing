@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import { UserContext } from '../../contexts/user.context';
 
 import {
   signInWithGooglePopup,
@@ -12,12 +14,14 @@ import Button from '../button/button.component';
 
 const defaultFormFields = {
   email: '',
-  password: '',
+  password: '', 
 };
-
+ 
 const SignIn = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
+
+  const { setCurrentUser } = useContext(UserContext)
 
   const resetField = () => {
     setFormFields(defaultFormFields);
@@ -40,17 +44,18 @@ const SignIn = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await signInAuthUserWithEmailAndPassword(email, password);
+      const {user} = await signInAuthUserWithEmailAndPassword(email, password);
+      setCurrentUser(user)
+
 
       resetField();
     } catch (error) {
       if (error.code === 'auth/user-not-found') {
-       alert('user not found')
-      } else if(error.code === 'auth/wrong-user') {
-       alert('wrong user')
-      }
-      else{
-       console.log(error)
+        alert('user not found');
+      } else if (error.code === 'auth/wrong-user') {
+        alert('wrong user');
+      } else {
+        console.log(error);
       }
     }
   };
@@ -69,7 +74,7 @@ const SignIn = () => {
         />
 
         <FormInput
-          label="Password"
+          label="Password" 
           type="password"
           onChange={handleChange}
           name="password"
@@ -78,7 +83,7 @@ const SignIn = () => {
 
         <div className="btn-sign">
           <Button type="submit">Sign In</Button>
-          <Button type='button' onClick={signInWithGoogle} buttonType="google">
+          <Button type="button" onClick={signInWithGoogle} buttonType="google">
             Sing in with google
           </Button>
         </div>

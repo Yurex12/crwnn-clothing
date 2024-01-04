@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import {
   createAuthUserWithEmailAndPassword,
@@ -6,8 +6,10 @@ import {
 } from '../../utils/firebase/firebase.utils';
 
 import FormInput from '../form-input/form-input.component';
-import './sign-up-form.styles.scss'
+import './sign-up-form.styles.scss';
 import Button from '../button/button.component';
+
+import { UserContext } from '../../contexts/user.context';
 
 const defaultFormFields = {
   displayName: '',
@@ -55,43 +57,43 @@ const SignUp = () => {
 
   return (
     <div className='sign-up-container'>
-     <h2>Dont have an account?</h2>
+      <h2>Dont have an account?</h2>
       <span>Sign up with your email and password</span>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <FormInput
-          label="DisplayName"
-          type="text"
+          label='DisplayName'
+          type='text'
           onChange={handleChange}
-          name="displayName"
+          name='displayName'
           value={displayName}
         />
         <FormInput
-          label="Email"
-          type="email"
+          label='Email'
+          type='email'
           onChange={handleChange}
-          name="email"
+          name='email'
           value={email}
         />
 
         <FormInput
-          label="Password"
-          type="password"
+          label='Password'
+          type='password'
           onChange={handleChange}
-          name="password"
+          name='password'
           value={password}
         />
         <FormInput
-          label="Confirm Password"
-          type="password"
-          onChange={handleChange} 
-          name="confirmPassword"
+          label='Confirm Password'
+          type='password'
+          onChange={handleChange}
+          name='confirmPassword'
           value={confirmPassword}
         />
 
-        <Button type="submit">Sign up</Button>
-      </form>  
+        <Button type='submit'>Sign up</Button>
+      </form>
     </div>
   );
-}; 
+};
 
 export default SignUp;
