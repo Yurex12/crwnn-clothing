@@ -1,7 +1,5 @@
 import { useState, useContext } from 'react';
 
-import { UserContext } from '../../contexts/user.context';
-
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -11,29 +9,23 @@ import {
 import FormInput from '../form-input/form-input.component';
 import './sign-in.styles.scss';
 import Button from '../button/button.component';
+import { useUser } from '../../contexts/user.context';
 
 const defaultFormFields = {
   email: '',
-  password: '', 
+  password: '',
 };
- 
+
 const SignIn = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-
-  const { setCurrentUser } = useContext(UserContext)
 
   const resetField = () => {
     setFormFields(defaultFormFields);
   };
 
   const signInWithGoogle = async () => {
-    try {
-      const { user } = await signInWithGooglePopup();
-      await createUserDocumentFromAuth(user);
-    } catch (error) {
-      alert('error');
-    }
+    await signInWithGooglePopup();
   };
 
   const handleChange = (event) => {
@@ -44,9 +36,7 @@ const SignIn = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const {user} = await signInAuthUserWithEmailAndPassword(email, password);
-      setCurrentUser(user)
-
+      await signInAuthUserWithEmailAndPassword(email, password);
 
       resetField();
     } catch (error) {
@@ -61,29 +51,29 @@ const SignIn = () => {
   };
 
   return (
-    <div className="sign-in-container">
+    <div className='sign-in-container'>
       <h2>Welcome Back</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="Email"
-          type="email"
+          label='Email'
+          type='email'
           onChange={handleChange}
-          name="email"
+          name='email'
           value={email}
         />
 
         <FormInput
-          label="Password" 
-          type="password"
+          label='Password'
+          type='password'
           onChange={handleChange}
-          name="password"
+          name='password'
           value={password}
         />
 
-        <div className="btn-sign">
-          <Button type="submit">Sign In</Button>
-          <Button type="button" onClick={signInWithGoogle} buttonType="google">
+        <div className='btn-sign'>
+          <Button type='submit'>Sign In</Button>
+          <Button type='button' onClick={signInWithGoogle} buttonType='google'>
             Sing in with google
           </Button>
         </div>
