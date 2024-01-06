@@ -1,16 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
-*{
+* {
   margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
 body {
-  font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-family: 'Open Sans', sans-serif;
   -moz-osx-font-smoothing: grayscale;
+  padding: 20px 40px;
 }
 
-a{
+a {
   text-decoration: none;
   color: black;
 }
