@@ -1,12 +1,39 @@
 import Button from '../button/button.component';
 import './cart-dropdown.styles.scss';
 
+import CartItem from '../cart-item/cart-item.component';
+import { useCartIcon } from '../../contexts/cart.context';
+import { useNavigate } from 'react-router-dom';
+
 function CartDropdown() {
+  const { cartItems } = useCartIcon();
+
+  const navigate = useNavigate();
+
+  if (!cartItems.length)
+    return (
+      <div className='cart-dropdown-container'>
+        <p
+          style={{
+            marginTop: '100px',
+            textAlign: 'center',
+          }}
+        >
+          You have no items in your cart
+        </p>
+        ;
+      </div>
+    );
+
   return (
     <div className='cart-dropdown-container'>
       <div className='cart-items'>
-        <Button buttonType='inverted'>GO TO CHECKOUT</Button>
+        {cartItems.map((item) => (
+          <CartItem key={item.id} cartItem={item} />
+        ))}
       </div>
+
+      <Button onClick={() => navigate('/checkout')}>GO TO CHECKOUT </Button>
     </div>
   );
 }

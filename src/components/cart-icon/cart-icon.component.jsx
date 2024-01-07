@@ -4,7 +4,9 @@ import { useCartIcon } from '../../contexts/cart.context';
 import './cart-icon.styles.scss';
 
 function CartIcon() {
-  const { setIsOpen } = useCartIcon();
+  const { setIsOpen, cartItems } = useCartIcon();
+
+  const totalItem = cartItems.reduce((sum, item) => +sum + +item.quantity, []);
 
   return (
     <div
@@ -14,7 +16,9 @@ function CartIcon() {
       }}
     >
       <ShoppingIcon className='shopping-icon' />
-      <span className='item-count'>0</span>
+      <span className='item-count'>
+        {typeof totalItem !== 'number' ? 0 : totalItem}
+      </span>
     </div>
   );
 }
