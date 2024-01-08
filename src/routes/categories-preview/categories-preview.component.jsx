@@ -1,6 +1,5 @@
 import { useCategories } from '../../contexts/categories.context';
 
-import './categories-preview.styles.scss';
 import CategoryPreview from '../../components/category-preview/category-preview.component';
 
 function CategoriesPreview() {
