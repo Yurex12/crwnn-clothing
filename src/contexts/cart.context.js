@@ -1,52 +1,96 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 const CartIconContext = createContext();
 
-function addCartItem(cartItems, newCartItem) {
-  const itemPresent = cartItems.find((item) => item.id === newCartItem.id);
+const initialState = {
+  cartItems: [],
+  isOpen: false,
+};
 
-  if (itemPresent) {
-    return cartItems.map((item) =>
-      item.id === newCartItem.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
+function cartReducer(state, action) {
+  switch (action.type) {
+    case 'cart/addItem':
+      const itemPresent = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
+
+      if (itemPresent) {
+        const newCartItems = state.cartItems.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        return {
+          ...state,
+          cartItems: newCartItems,
+        };
+      }
+
+      return {
+        ...state,
+        cartItems: [...state.cartItems, { ...action.payload, quantity: 1 }],
+      };
+
+    case 'cart/reduceItemQuantity':
+      const val = action.payload.quantity;
+
+      if (val === 1) {
+        return {
+          ...state,
+          cartItems: state.cartItems.filter(
+            (item) => item.id !== action.payload.id
+          ),
+        };
+      }
+
+      const newCartItems = state.cartItems.map((item) =>
+        item.id === action.payload.id
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      );
+
+      return {
+        ...state,
+        cartItems: newCartItems,
+      };
+
+    case 'cart/removeItemFromCart':
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (item) => item.id !== action.payload.id
+        ),
+      };
+
+    case 'taskDropdown/toggle':
+      return {
+        ...state,
+        isOpen: !state.isOpen,
+      };
+
+    default:
+      throw new Error('Uknown action');
   }
-
-  return [...cartItems, { ...newCartItem, quantity: 1 }];
-}
-
-function reduceCartItemQuantity(cartItems, cartItem) {
-  const val = cartItem.quantity;
-
-  if (val === 1) return cartItems.filter((item) => item.id !== cartItem.id);
-
-  // return
-  const newCartItems = cartItems.map((item) =>
-    item.id === cartItem.id
-      ? { ...cartItem, quantity: cartItem.quantity - 1 }
-      : item
-  );
-
-  return newCartItems;
-}
-
-function removeCartItem(cartItems, cartItem) {
-  return cartItems.filter((item) => item.id !== cartItem.id);
 }
 
 function CartIconProvider({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [cartItems, setCartItem] = useState([]);
+  const [{ cartItems, isOpen }, dispatch] = useReducer(
+    cartReducer,
+    initialState
+  );
 
   function addItemToCart(newCartItem) {
-    setCartItem(addCartItem(cartItems, newCartItem));
+    dispatch({ type: 'cart/addItem', payload: newCartItem });
   }
   function reduceItemQuantity(cartItem) {
-    setCartItem(reduceCartItemQuantity(cartItems, cartItem));
+    dispatch({ type: 'cart/reduceItemQuantity', payload: cartItem });
   }
   function removeItemFromCart(cartItem) {
-    setCartItem(removeCartItem(cartItems, cartItem));
+    dispatch({ type: 'cart/removeItemFromCart', payload: cartItem });
+  }
+
+  function setIsOpen() {
+    dispatch({ type: 'taskDropdown/toggle' });
   }
 
   return (

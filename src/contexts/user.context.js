@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+} from 'react';
 
 import {
   createUserDocumentFromAuth,
@@ -11,15 +17,35 @@ const UserContext = createContext({
   setCurrentUser: () => null,
 });
 
+const initialState = {
+  currentUser: null,
+};
+
+function userReducer(state, action) {
+  switch (action.type) {
+    case 'currentUser/set':
+      return {
+        ...state,
+        currentUser: action.payload,
+      };
+
+    default:
+      throw new Error('uknown action');
+  }
+}
+
 function UserProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
-  const value = { currentUser, setCurrentUser };
+  const [{ currentUser }, dispatch] = useReducer(userReducer, initialState);
+  const value = {
+    currentUser,
+  };
 
   useEffect(() => {
     function unsubscribe() {
       onAuthStateChangedListener((user) => {
         if (user) createUserDocumentFromAuth(user);
-        setCurrentUser(user);
+
+        dispatch({ type: 'currentUser/set', payload: user });
       });
     }
 
