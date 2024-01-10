@@ -4,14 +4,16 @@ import { ReactComponent as CrwnnLogo } from '../../assets/crown.svg';
 import CartIcon from '../../components/cart-icon/cart-icon.component';
 
 import './navigation.styles.scss';
-import { useUser } from '../../contexts/user.context';
+
 import { signOutAuthUser } from '../../utils/firebase/firebase.utils';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 import { useCartIcon } from '../../contexts/cart.context';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../store/user/user-reducer';
 
 const Navigation = () => {
   const { isOpen } = useCartIcon();
-  const { currentUser } = useUser();
+  const currentUser = useSelector(getUser);
 
   return (
     <>

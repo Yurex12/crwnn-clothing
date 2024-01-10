@@ -9,7 +9,6 @@ import {
 import FormInput from '../form-input/form-input.component';
 import './sign-in.styles.scss';
 import Button from '../button/button.component';
-import { useUser } from '../../contexts/user.context';
 
 const defaultFormFields = {
   email: '',
