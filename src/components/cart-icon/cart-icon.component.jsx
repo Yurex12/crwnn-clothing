@@ -1,20 +1,19 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as ShoppingIcon } from '../../assets/shopping-bag.svg';
-import { useCartIcon } from '../../contexts/cart.context';
 
 import './cart-icon.styles.scss';
+import { getTotalItem } from '../../store/cart/cart-reducer';
 
 function CartIcon() {
-  const { setIsOpen, cartItems } = useCartIcon();
+  const dispatch = useDispatch();
+  const totalItem = useSelector(getTotalItem);
 
-  const totalItem = cartItems.reduce((sum, item) => +sum + +item.quantity, []);
+  function handleCartDropdownToggle() {
+    dispatch({ type: 'taskDropdown/toggle' });
+  }
 
   return (
-    <div
-      className='cart-icon-container'
-      onClick={() => {
-        setIsOpen((c) => !c);
-      }}
-    >
+    <div className='cart-icon-container' onClick={handleCartDropdownToggle}>
       <ShoppingIcon className='shopping-icon' />
       <span className='item-count'>
         {typeof totalItem !== 'number' ? 0 : totalItem}

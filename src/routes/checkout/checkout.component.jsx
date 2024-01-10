@@ -1,15 +1,13 @@
+import { useSelector } from 'react-redux';
 import CheckoutItem from '../../components/checkout-item/checkout-item.component';
-import { useCartIcon } from '../../contexts/cart.context';
 
 import './checkout.styles.scss';
+import { getCartItems, getTotalPrice } from '../../store/cart/cart-reducer';
 
 function Checkout() {
-  const { cartItems } = useCartIcon();
+  const totalPrice = useSelector(getTotalPrice);
+  const cartItems = useSelector(getCartItems);
 
-  const total = cartItems.reduce(
-    (acc, arr) => acc + arr.quantity * arr.price,
-    0
-  );
   return (
     <div className='checkout-container'>
       <div className='checkout-header'>
@@ -33,7 +31,7 @@ function Checkout() {
       {cartItems.map((item) => (
         <CheckoutItem cartItem={item} key={item.id} />
       ))}
-      <span className='total'>Total : ${total}</span>
+      <span className='total'>Total : ${totalPrice}</span>
     </div>
   );
 }

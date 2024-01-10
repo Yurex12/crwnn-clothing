@@ -1,13 +1,14 @@
-import { useCartIcon } from '../../contexts/cart.context';
+import { useDispatch } from 'react-redux';
+
 import Button from '../button/button.component';
 import './product-card.styles.scss';
 
 function ProductCard({ product }) {
+  const dispatch = useDispatch();
   const { name, price, imageUrl } = product;
-  const { addItemToCart } = useCartIcon();
 
-  function handleAddToCart() {
-    addItemToCart(product);
+  function handleAddItem(product) {
+    dispatch({ type: 'cart/addItem', payload: product });
   }
   return (
     <div className='product-card-container'>
@@ -16,7 +17,7 @@ function ProductCard({ product }) {
         <span className='name'>{name}</span>
         <span className='price'>{price}</span>
       </div>
-      <Button buttonType='inverted' onClick={handleAddToCart}>
+      <Button buttonType='inverted' onClick={() => handleAddItem(product)}>
         Add to cart
       </Button>
     </div>

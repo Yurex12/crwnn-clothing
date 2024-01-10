@@ -7,13 +7,14 @@ import './navigation.styles.scss';
 
 import { signOutAuthUser } from '../../utils/firebase/firebase.utils';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
-import { useCartIcon } from '../../contexts/cart.context';
+
 import { useSelector } from 'react-redux';
 import { getUser } from '../../store/user/user-reducer';
+import { getIsOpen } from '../../store/cart/cart-reducer';
 
 const Navigation = () => {
-  const { isOpen } = useCartIcon();
   const currentUser = useSelector(getUser);
+  const isOpen = useSelector(getIsOpen);
 
   return (
     <>

@@ -2,15 +2,18 @@ import Button from '../button/button.component';
 import './cart-dropdown.styles.scss';
 
 import CartItem from '../cart-item/cart-item.component';
-import { useCartIcon } from '../../contexts/cart.context';
+
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCartItems } from '../../store/cart/cart-reducer';
 
 function CartDropdown() {
-  const { cartItems } = useCartIcon();
-
+  const cartItems = useSelector(getCartItems);
   const navigate = useNavigate();
+  console.log(1,cartItems)
 
   if (!cartItems.length)
+
     return (
       <div className='cart-dropdown-container'>
         <p

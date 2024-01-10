@@ -1,13 +1,11 @@
-import { createContext, useContext, useReducer } from 'react';
-
-const CartIconContext = createContext();
+import { createSelector } from 'reselect';
 
 const initialState = {
   cartItems: [],
   isOpen: false,
 };
 
-function cartReducer(state, action) {
+export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case 'cart/addItem':
       const itemPresent = state.cartItems.find(
@@ -69,52 +67,28 @@ function cartReducer(state, action) {
       };
 
     default:
-      throw new Error('Uknown action');
+      return state;
   }
 }
 
-function CartIconProvider({ children }) {
-  const [{ cartItems, isOpen }, dispatch] = useReducer(
-    cartReducer,
-    initialState
-  );
+export const getTotal = (state) => state.cart.cartItems;
 
-  function addItemToCart(newCartItem) {
-    dispatch({ type: 'cart/addItem', payload: newCartItem });
-  }
-  function reduceItemQuantity(cartItem) {
-    dispatch({ type: 'cart/reduceItemQuantity', payload: cartItem });
-  }
-  function removeItemFromCart(cartItem) {
-    dispatch({ type: 'cart/removeItemFromCart', payload: cartItem });
-  }
+export const getTotalItem = createSelector([getTotal], (categories) => {
+  const totalItem = categories.reduce((sum, item) => +sum + +item.quantity, []);
+  return totalItem;
+});
 
-  function setIsOpen() {
-    dispatch({ type: 'taskDropdown/toggle' });
-  }
+export function getIsOpen(state) {
+  return state.cart.isOpen;
+}
 
-  return (
-    <CartIconContext.Provider
-      value={{
-        isOpen,
-        setIsOpen,
-        addItemToCart,
-        cartItems,
-        reduceItemQuantity,
-        removeItemFromCart,
-      }}
-    >
-      {children}
-    </CartIconContext.Provider>
+export function getCartItems(state) {
+  return state.cart.cartItems;
+}
+
+export function getTotalPrice(state) {
+  return state.cart.cartItems.reduce(
+    (acc, arr) => acc + arr.quantity * arr.price,
+    0
   );
 }
-
-function useCartIcon() {
-  const context = useContext(CartIconContext);
-
-  if (context === undefined)
-    throw new Error('cartIcon context was used outside of it provider');
-  return context;
-}
-
-export { CartIconProvider, useCartIcon };

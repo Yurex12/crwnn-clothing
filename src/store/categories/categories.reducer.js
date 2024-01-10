@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 const initialState = {
   categories: [],
 };
@@ -5,7 +6,6 @@ const initialState = {
 export function categoriesReducer(state = initialState, action = {}) {
   switch (action.type) {
     case 'categories/set':
-      console.log(action.payload);
       return {
         ...state,
         categories: action.payload,
@@ -16,10 +16,17 @@ export function categoriesReducer(state = initialState, action = {}) {
   }
 }
 
-export const getCategories = (store) =>
-  store.categories.categories.reduce((acc, category) => {
-    const { items, title } = category;
+const categoriesSelector = (state) => state.categories;
 
+export const selectCategories = createSelector(
+  [categoriesSelector],
+  (categoriesSlice) => categoriesSlice.categories
+);
+
+export const getCategories = createSelector([selectCategories], (categories) =>
+  categories.reduce((acc, category) => {
+    const { items, title } = category;
     acc[title.toLowerCase()] = items;
     return acc;
-  }, {});
+  }, {})
+);
