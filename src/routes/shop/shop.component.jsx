@@ -3,19 +3,22 @@ import './shop.styles.scss';
 import CategoriesPreview from '../categories-preview/categories-preview.component';
 import Category from '../category/category.component';
 import { useEffect } from 'react';
-import { getCategoriesAndDocuments } from '../../utils/firebase/firebase.utils';
-import { useDispatch } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getIsLoading } from '../../store/categories/categories.reducer';
+import Spinner from '../../components/spinner/spinner.component';
 
 function Shop() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    async function getData() {
-      const categoriesArray = await getCategoriesAndDocuments();
+  const isLoading = useSelector(getIsLoading);
 
-      dispatch({ type: 'categories/set', payload: categoriesArray });
-    }
-    getData();
+  useEffect(() => {
+    dispatch({ type: 'categories/fetch-start' });
   }, []);
+
+  if (isLoading) return <Spinner />;
+
   return (
     <Routes>
       <Route index element={<CategoriesPreview />} />
