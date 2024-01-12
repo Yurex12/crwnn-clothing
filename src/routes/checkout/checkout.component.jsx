@@ -3,6 +3,7 @@ import CheckoutItem from '../../components/checkout-item/checkout-item.component
 
 import './checkout.styles.scss';
 import { getCartItems, getTotalPrice } from '../../store/cart/cart-reducer';
+import PaymentForm from '../../components/payment-form/payment-form.component';
 
 function Checkout() {
   const totalPrice = useSelector(getTotalPrice);
@@ -32,6 +33,7 @@ function Checkout() {
         <CheckoutItem cartItem={item} key={item.id} />
       ))}
       <span className='total'>Total : ${totalPrice}</span>
+      <PaymentForm />
     </div>
   );
 }

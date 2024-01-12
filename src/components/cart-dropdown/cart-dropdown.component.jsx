@@ -10,10 +10,8 @@ import { getCartItems } from '../../store/cart/cart-reducer';
 function CartDropdown() {
   const cartItems = useSelector(getCartItems);
   const navigate = useNavigate();
-  console.log(1,cartItems)
 
   if (!cartItems.length)
-
     return (
       <div className='cart-dropdown-container'>
         <p
