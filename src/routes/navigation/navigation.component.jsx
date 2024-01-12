@@ -14,6 +14,8 @@ import { getIsOpen } from '../../store/cart/cart-reducer';
 
 const Navigation = () => {
   const currentUser = useSelector(getUser);
+
+  console.log(currentUser);
   const isOpen = useSelector(getIsOpen);
 
   return (
