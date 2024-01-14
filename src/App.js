@@ -16,15 +16,17 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    function unsubscribe() {
-      onAuthStateChangedListener((user) => {
-        if (user) createUserDocumentFromAuth(user);
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) createUserDocumentFromAuth(user);
 
-        dispatch({ type: 'currentUser/set', payload: user });
-      });
-    }
+      dispatch({ type: 'currentUser/set', payload: user });
+      if (user) createUserDocumentFromAuth(user);
 
-    return unsubscribe;
+      dispatch({ type: 'currentUser/set', payload: user });
+    });
+
+    return () => unsubscribe;
+    // return unsubscribe
   }, [dispatch]);
 
   return (
