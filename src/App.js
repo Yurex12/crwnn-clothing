@@ -20,12 +20,10 @@ const App = () => {
       if (user) createUserDocumentFromAuth(user);
 
       dispatch({ type: 'currentUser/set', payload: user });
-      if (user) createUserDocumentFromAuth(user);
-
-      dispatch({ type: 'currentUser/set', payload: user });
     });
 
     return () => unsubscribe;
+
     // return unsubscribe
   }, [dispatch]);
 
