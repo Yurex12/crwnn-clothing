@@ -23,8 +23,6 @@ const App = () => {
     });
 
     return () => unsubscribe;
-
-    // return unsubscribe
   }, [dispatch]);
 
   return (
